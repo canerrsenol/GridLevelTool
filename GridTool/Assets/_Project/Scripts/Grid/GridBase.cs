@@ -1,8 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class GridBase
+public class GridBase : MonoBehaviour
 {
+    public Tile[,] grid;
+
+    private int width;
+    private int length;
     
 }
