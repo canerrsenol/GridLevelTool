@@ -1,55 +1,64 @@
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class GridCreator : MonoBehaviour
 {
+    [SerializeField] private TileObjectsFactory tileObjectsFactory;
+    
     [SerializeField] private GameObject tilePrefab;
+
+    [SerializeField] private Vector2Int gridSize;
     
-    [Min(0)] [SerializeField] private int width;
-    [Min(0)] [SerializeField] private int height;
+    public Vector2Int GridSize => gridSize;
+    
     [SerializeField] private float tileSize = 1.1f;
-    public int Width => width;
-    public int Height => height;
+
     public float TileSize => tileSize;
-    
-    [SerializeField] public GameObject[] TileObjects;
     
     private int[,] tileObjectIndexArray;
 
+    //[HideInInspector] 
     public GameObject GridParent;
     
+    //[HideInInspector] 
     public GameObject TileObjectsParent;
     
+    public GameObject GetTileObject(int index)
+    {
+        return tileObjectsFactory.GetTileObjectPrefabAtIndex(index);
+    }
+
     public void CreateGrid()
     {
-        tileObjectIndexArray = new int[width, height];
+        if(gridSize.x <= 0 || gridSize.y <= 0) return;
+        tileObjectIndexArray = new int[gridSize.x, gridSize.y];
         
-        for (int x = 0; x < width; x++)
+        if (GridParent == null)
         {
-            for (int y = 0; y < height; y++)
+            GameObject gridParent = new GameObject("GridBase");
+            GridParent = gridParent;
+        }
+        
+        for (int x = 0; x < gridSize.x; x++)
+        {
+            for (int y = 0; y < gridSize.y; y++)
             {
                 GameObject tile = PrefabUtility.InstantiatePrefab(tilePrefab) as GameObject;
                 SetTilePosition(tile.transform, x, y);
-                tile.transform.parent = transform;
+                tile.transform.parent = GridParent.transform;
             }
         }
             
         EditorUtility.SetDirty(gameObject);
     }
-    
-    public GameObject GetTileObject(int index)
-    {
-        return TileObjects[index];
-    }
 
     public void UpdateAllTilesPosition()
     {
-        for (int x = 0; x < width; x++)
+        for (int x = 0; x < gridSize.x; x++)
         {
-            for (int y = 0; y < height; y++)
+            for (int y = 0; y < gridSize.y; y++)
             {
-                SetTilePosition(transform.GetChild(x * height + y), x, y);
+                SetTilePosition(GridParent.transform.GetChild(x * gridSize.y + y), x, y);
             }
         }
     }
@@ -66,16 +75,66 @@ public class GridCreator : MonoBehaviour
         DestroyImmediate(GridParent);
         DestroyImmediate(TileObjectsParent);
         
-        width = 0;
-        height = 0;
+        gridSize.x = 0;
+        gridSize.y = 0;
         tileSize = 1;
+    }
+    
+    private void DestroyIfTileHasObject(Vector2Int tilePosition)
+    {
+        if (TileObjectsParent != null)
+        {
+            var tileObjects = TileObjectsParent.GetComponentsInChildren<ITileObject>();
+            
+            if(tileObjects != null && tileObjects.Length > 0)
+            {
+                foreach (ITileObject tileObject in tileObjects)
+                {
+                    if (tileObject.GetTilePosition() == tilePosition)
+                    {
+                        var tileObjectMonoBehaviour = tileObject as MonoBehaviour;
+                        DestroyImmediate(tileObjectMonoBehaviour.gameObject);
+                    }
+                }
+            }
+        }
+    }
+    
+    public void SetNextTileObject(Vector2Int tilePosition)
+    {
+        DestroyIfTileHasObject(tilePosition);
+        if(tileObjectIndexArray == null) tileObjectIndexArray = new int[gridSize.x, gridSize.y];
+        
+        int newIndex = tileObjectIndexArray[tilePosition.x, tilePosition.y];
+        newIndex = (newIndex + 1) % tileObjectsFactory.GetTileObjectsCount();
+        tileObjectIndexArray[tilePosition.x, tilePosition.y] = newIndex;
+        
+        if(newIndex == 0) return;
+        
+        GameObject tileObject = tileObjectsFactory.SpawnTileObject(newIndex);
+        tileObject.transform.position = new Vector3(tilePosition.x * tileSize, 0, tilePosition.y * tileSize);
+        
+        if(TileObjectsParent == null)
+        {
+            GameObject tileObjectsParent = new GameObject("TileObjects");
+            TileObjectsParent = tileObjectsParent;
+        }
+        tileObject.transform.SetParent(TileObjectsParent.transform);
+        
+        ITileObject tileObjectComponent = tileObject.GetComponent<ITileObject>();
+        if (tileObjectComponent != null) tileObjectComponent.SetTilePosition(tilePosition);
+        
+        EditorUtility.SetDirty(gameObject);
+    }
+    
+    public int GetTileObjectIndex(int x, int y)
+    {
+        if (tileObjectIndexArray == null) return 0;
+        return tileObjectIndexArray[x, y];
     }
 
     public void DestroyAllTiles()
     {
-        for (int i = transform.childCount - 1; i >= 0; i--)
-        {
-            DestroyImmediate(transform.GetChild(i).gameObject);
-        }
+        DestroyImmediate(GridParent.gameObject);
     }
 }

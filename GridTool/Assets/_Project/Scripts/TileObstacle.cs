@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class TileObstacle : ITileObject
+public class TileObstacle : MonoBehaviour, ITileObject
 {
     public Vector2Int TilePosition { get; set; }
 

@@ -2,9 +2,11 @@ using UnityEngine;
 
 public class GridBase : MonoBehaviour
 {
-    public Tile[,] grid;
-
-    private int width;
-    private int length;
+    private Vector2Int gridSize;
+    private float tileSize;
+    
+    private Tile[,] grid;
+    
+    
     
 }

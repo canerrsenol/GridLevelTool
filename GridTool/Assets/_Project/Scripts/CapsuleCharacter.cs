@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CapsuleCharacter : ITileObject
+public class CapsuleCharacter : MonoBehaviour, ITileObject
 {
     public Vector2Int TilePosition { get; set; }
 

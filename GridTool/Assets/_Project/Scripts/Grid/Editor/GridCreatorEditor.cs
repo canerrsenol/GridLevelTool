@@ -13,8 +13,8 @@ public class GridCreatorEditor : Editor
     private void OnEnable()
     {
         gridCreator = (GridCreator)target;
-        previousWidth = gridCreator.Width;
-        previousHeight = gridCreator.Height;
+        previousWidth = gridCreator.GridSize.x;
+        previousHeight = gridCreator.GridSize.y;
         previousTileSize = gridCreator.TileSize;
     }
 
@@ -22,14 +22,14 @@ public class GridCreatorEditor : Editor
     {
         base.OnInspectorGUI();
         
-        if (previousWidth != gridCreator.Width
-            || previousHeight != gridCreator.Height)
+        if (previousWidth != gridCreator.GridSize.x
+            || previousHeight != gridCreator.GridSize.y)
         {
             gridCreator.DestroyAllTiles();
             gridCreator.CreateGrid();
             
-            previousHeight = gridCreator.Height;
-            previousWidth = gridCreator.Width;
+            previousHeight = gridCreator.GridSize.x;
+            previousWidth = gridCreator.GridSize.y;
         }
 
         if (!Mathf.Approximately(previousTileSize, gridCreator.TileSize))
@@ -44,34 +44,27 @@ public class GridCreatorEditor : Editor
             gridCreator.ResetGridSettings();
         }
 
-        if (gridCreator.Width > 0 && gridCreator.Height > 0)
+        if (gridCreator.GridSize.x > 0 && gridCreator.GridSize.y > 0)
         {
-            // Calculate width and height for dynamic grid layout
             float inspectorWidth = EditorGUIUtility.currentViewWidth * .8f;
-            float buttonSize = inspectorWidth / gridCreator.Width;
+            float buttonSize = inspectorWidth / gridCreator.GridSize.x;
             
-            for (int y = gridCreator.Height - 1; y >= 0; y--)
+            for (int y = gridCreator.GridSize.y - 1; y >= 0; y--)
             {
-                GUILayout.BeginHorizontal(); // Start a new row
+                GUILayout.BeginHorizontal();
                 
-                for (int x = 0; x < gridCreator.Width; x++)
+                for (int x = 0; x < gridCreator.GridSize.x; x++)
                 {
-                    // int index = gridCreator.TileObjectIndex[x, y];
-                    //if (index >= 0 && index < gridCreator.TileObjects.Length)
-                    //{
-                        Texture2D previewTexture = AssetPreview.GetAssetPreview(gridCreator.GetTileObject(0));
+                    int index = gridCreator.GetTileObjectIndex(x, y);
+                    Texture2D previewTexture = AssetPreview.GetAssetPreview(gridCreator.GetTileObject(index));
                         
-                        // Display as a button
-                        if (GUILayout.Button(previewTexture, GUILayout.Width(buttonSize), GUILayout.Height(buttonSize)))
-                        {
-                            // Action when button is clicked
-                            Debug.Log($"Button at [{x}, {y}] clicked!");
-                            // You can call a method or set a property here
-                        }
-                    //}
+                    if (GUILayout.Button(previewTexture, GUILayout.Width(buttonSize), GUILayout.Height(buttonSize)))
+                    {
+                        Debug.Log($"Button at [{x}, {y}] clicked!");
+                        gridCreator.SetNextTileObject(new Vector2Int(x, y));
+                    }
                 }
-                
-                GUILayout.EndHorizontal(); // End the current row
+                GUILayout.EndHorizontal();
             }
         }
     }
