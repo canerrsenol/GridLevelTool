@@ -1,67 +1,72 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(GridCreator))]
+[CustomEditor(typeof(GridLevelCreator))]
 public class GridCreatorEditor : Editor
 {
     private int previousWidth;
     private int previousHeight;
     private float previousTileSize;
 
-    private GridCreator gridCreator;
+    private GridLevelCreator gridLevelCreator;
     
     private void OnEnable()
     {
-        gridCreator = (GridCreator)target;
-        previousWidth = gridCreator.GridSize.x;
-        previousHeight = gridCreator.GridSize.y;
-        previousTileSize = gridCreator.TileSize;
+        gridLevelCreator = (GridLevelCreator)target;
+        previousWidth = gridLevelCreator.GridSize.x;
+        previousHeight = gridLevelCreator.GridSize.y;
+        previousTileSize = gridLevelCreator.TileSize;
     }
 
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
         
-        if (previousWidth != gridCreator.GridSize.x
-            || previousHeight != gridCreator.GridSize.y)
+        if (previousWidth != gridLevelCreator.GridSize.x
+            || previousHeight != gridLevelCreator.GridSize.y)
         {
-            gridCreator.DestroyAllTiles();
-            gridCreator.CreateGrid();
+            gridLevelCreator.DestroyAllTiles();
+            gridLevelCreator.CreateGrid();
             
-            previousHeight = gridCreator.GridSize.x;
-            previousWidth = gridCreator.GridSize.y;
+            previousHeight = gridLevelCreator.GridSize.x;
+            previousWidth = gridLevelCreator.GridSize.y;
         }
 
-        if (!Mathf.Approximately(previousTileSize, gridCreator.TileSize))
+        if (!Mathf.Approximately(previousTileSize, gridLevelCreator.TileSize))
         {
-            gridCreator.UpdateAllTilesPosition();
-            previousTileSize = gridCreator.TileSize;
+            gridLevelCreator.UpdateAllTilesPosition();
+            gridLevelCreator.UpdateAllTileObjectsPosition();
+            previousTileSize = gridLevelCreator.TileSize;
         }
         
-        if (GUILayout.Button("Clear Grid"))
+        if (GUILayout.Button("Clear All"))
         {
-            gridCreator.DestroyAllTiles();
-            gridCreator.ResetGridSettings();
+            gridLevelCreator.DestroyAllTiles();
+            gridLevelCreator.ResetGridSettings();
         }
 
-        if (gridCreator.GridSize.x > 0 && gridCreator.GridSize.y > 0)
+        if (gridLevelCreator.GridSize.x > 0 && gridLevelCreator.GridSize.y > 0)
         {
             float inspectorWidth = EditorGUIUtility.currentViewWidth * .8f;
-            float buttonSize = inspectorWidth / gridCreator.GridSize.x;
+            float buttonSize = inspectorWidth / gridLevelCreator.GridSize.x;
             
-            for (int y = gridCreator.GridSize.y - 1; y >= 0; y--)
+            for (int y = gridLevelCreator.GridSize.y - 1; y >= 0; y--)
             {
                 GUILayout.BeginHorizontal();
                 
-                for (int x = 0; x < gridCreator.GridSize.x; x++)
+                for (int x = 0; x < gridLevelCreator.GridSize.x; x++)
                 {
-                    int index = gridCreator.GetTileObjectIndex(x, y);
-                    Texture2D previewTexture = AssetPreview.GetAssetPreview(gridCreator.GetTileObject(index));
-                        
+                    Texture2D previewTexture = null;
+                    
+                    if(gridLevelCreator.HasTileObject(new Vector2Int(x, y)))
+                    {
+                        int index = gridLevelCreator.GetTileObjectPrefabIndex(new Vector2Int(x, y));
+                        previewTexture = AssetPreview.GetAssetPreview(gridLevelCreator.GetTileObjectPrefab(index));
+                    }
+                    
                     if (GUILayout.Button(previewTexture, GUILayout.Width(buttonSize), GUILayout.Height(buttonSize)))
                     {
-                        Debug.Log($"Button at [{x}, {y}] clicked!");
-                        gridCreator.SetNextTileObject(new Vector2Int(x, y));
+                        gridLevelCreator.SetNextTileObject(new Vector2Int(x, y));
                     }
                 }
                 GUILayout.EndHorizontal();
