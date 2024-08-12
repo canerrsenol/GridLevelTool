@@ -480,6 +480,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2077648022
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2077648024}
+  - component: {fileID: 2077648023}
+  m_Layer: 0
+  m_Name: GridMoveManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2077648023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2077648022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71ece4a0b2c588c4395082f7d02925ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &2077648024
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2077648022}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 7.3115344, y: 4.7852445, z: -11.105752}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &5430294814844574256
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -495,7 +539,102 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6151142800737249736, guid: 0fe5b4d3657afed44ba6ca630e9c37ea,
         type: 3}
+      propertyPath: tileSize
+      value: 1.27
+      objectReference: {fileID: 0}
+    - target: {fileID: 6151142800737249736, guid: 0fe5b4d3657afed44ba6ca630e9c37ea,
+        type: 3}
       propertyPath: GridParent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6151142800737249736, guid: 0fe5b4d3657afed44ba6ca630e9c37ea,
+        type: 3}
+      propertyPath: gridSize.x
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6151142800737249736, guid: 0fe5b4d3657afed44ba6ca630e9c37ea,
+        type: 3}
+      propertyPath: gridSize.y
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6151142800737249736, guid: 0fe5b4d3657afed44ba6ca630e9c37ea,
+        type: 3}
+      propertyPath: tileObjectsDictionary._serializedList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6151142800737249736, guid: 0fe5b4d3657afed44ba6ca630e9c37ea,
+        type: 3}
+      propertyPath: tileObjectsDictionary._serializedList.Array.data[0].Key.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6151142800737249736, guid: 0fe5b4d3657afed44ba6ca630e9c37ea,
+        type: 3}
+      propertyPath: tileObjectsDictionary._serializedList.Array.data[0].Key.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6151142800737249736, guid: 0fe5b4d3657afed44ba6ca630e9c37ea,
+        type: 3}
+      propertyPath: tileObjectsDictionary._serializedList.Array.data[0].Value
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6151142800737249736, guid: 0fe5b4d3657afed44ba6ca630e9c37ea,
+        type: 3}
+      propertyPath: tileObjectsDictionary._serializedList.Array.data[1].Key.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6151142800737249736, guid: 0fe5b4d3657afed44ba6ca630e9c37ea,
+        type: 3}
+      propertyPath: tileObjectsDictionary._serializedList.Array.data[1].Key.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6151142800737249736, guid: 0fe5b4d3657afed44ba6ca630e9c37ea,
+        type: 3}
+      propertyPath: tileObjectsDictionary._serializedList.Array.data[1].Value
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6151142800737249736, guid: 0fe5b4d3657afed44ba6ca630e9c37ea,
+        type: 3}
+      propertyPath: tileObjectsDictionary._serializedList.Array.data[2].Key.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6151142800737249736, guid: 0fe5b4d3657afed44ba6ca630e9c37ea,
+        type: 3}
+      propertyPath: tileObjectsDictionary._serializedList.Array.data[2].Key.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6151142800737249736, guid: 0fe5b4d3657afed44ba6ca630e9c37ea,
+        type: 3}
+      propertyPath: tileObjectsDictionary._serializedList.Array.data[2].Value
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6151142800737249736, guid: 0fe5b4d3657afed44ba6ca630e9c37ea,
+        type: 3}
+      propertyPath: tileObjectsDictionary._serializedList.Array.data[3].Key.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6151142800737249736, guid: 0fe5b4d3657afed44ba6ca630e9c37ea,
+        type: 3}
+      propertyPath: tileObjectsDictionary._serializedList.Array.data[3].Key.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6151142800737249736, guid: 0fe5b4d3657afed44ba6ca630e9c37ea,
+        type: 3}
+      propertyPath: tileObjectsDictionary._serializedList.Array.data[3].Value
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6151142800737249736, guid: 0fe5b4d3657afed44ba6ca630e9c37ea,
+        type: 3}
+      propertyPath: tileObjectsDictionary._serializedList.Array.data[4].Key.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6151142800737249736, guid: 0fe5b4d3657afed44ba6ca630e9c37ea,
+        type: 3}
+      propertyPath: tileObjectsDictionary._serializedList.Array.data[4].Key.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6151142800737249736, guid: 0fe5b4d3657afed44ba6ca630e9c37ea,
+        type: 3}
+      propertyPath: tileObjectsDictionary._serializedList.Array.data[4].Value
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8310905082387211555, guid: 0fe5b4d3657afed44ba6ca630e9c37ea,
@@ -562,3 +701,4 @@ SceneRoots:
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 5430294814844574256}
+  - {fileID: 2077648024}

@@ -27,6 +27,7 @@ public class GridLevelCreator : MonoBehaviour
         if (GridParent == null)
         {
             GameObject gridParent = new GameObject("GridBase");
+            gridParent.gameObject.AddComponent<GridBase>().SetGridSettings(gridSize, tileSize);
             GridParent = gridParent;
         }
         
@@ -159,5 +160,6 @@ public class GridLevelCreator : MonoBehaviour
         }
 
         tileObjectsDictionary.Clear();
+        EditorUtility.SetDirty(gameObject);
     }
 }
