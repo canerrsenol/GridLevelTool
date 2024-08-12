@@ -15,8 +15,7 @@ public class GridLevelCreator : MonoBehaviour
     [SerializeField] private float tileSize = 1.1f;
     public float TileSize => tileSize;
 
-    [HideInInspector]
-    [SerializedDictionary("Tile Position", "Object Transform")] 
+    [HideInInspector] [SerializedDictionary("Tile Position", "Object Transform")] 
     [SerializeField] private SerializedDictionary<Vector2Int, Transform> tileObjectsDictionary;
     
     [HideInInspector] public GameObject GridParent;
@@ -97,9 +96,8 @@ public class GridLevelCreator : MonoBehaviour
     {
         DestroyAllTiles();
         DestroyAllTileObjects();
-
-        gridSize.x = 0;
-        gridSize.y = 0;
+        
+        gridSize = Vector2Int.zero;
         tileSize = 1;
     }
     

@@ -6,19 +6,14 @@ public class TileObjectsFactory : ScriptableObject
 {
     [SerializeField] private GameObject[] tileObjects;
     
-    public int GetTileObjectsCount()
+    private GameObject SpawnTileObject(int index)
     {
-        return tileObjects.Length;
+        return PrefabUtility.InstantiatePrefab(tileObjects[index]) as GameObject; 
     }
     
     public GameObject GetTileObjectPrefabAtIndex(int index)
     {
         return tileObjects[index];
-    }
-
-    public GameObject SpawnTileObject(int index)
-    {
-        return PrefabUtility.InstantiatePrefab(tileObjects[index]) as GameObject; 
     }
     
     public int GetTileObjectPrefabIndex(GameObject tileObject)
