@@ -15,7 +15,7 @@ public class GridLevelCreator : MonoBehaviour
     [SerializeField] private float tileSize = 1.1f;
     public float TileSize => tileSize;
 
-    [SerializedDictionary("Tile Position", "Object Transform")] 
+    [HideInInspector] [SerializedDictionary("Tile Position", "Object Transform")] 
     public SerializedDictionary<Vector2Int, Transform> tileObjectsDictionary;
     
     [HideInInspector] public GameObject GridParent;

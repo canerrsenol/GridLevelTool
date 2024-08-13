@@ -36,14 +36,12 @@ public class GridMoveManager : MonoBehaviour
     }
 
     private void HandleClick(Vector2 screenPosition)
-    {
-        // If we have current mover and it is moving, return
+    { 
         if (currentMover != null)
         {
             if(currentMover.IsMoving()) return;
             
-            // Raycast to ground layer and get the position
-            Ray ray = Camera.main.ScreenPointToRay(screenPosition);
+            Ray ray = GetRayFromScreenPosition(screenPosition);
             if (Physics.Raycast(ray, out RaycastHit raycastHit, float.MaxValue, groundLayer))
             {
                 Vector3 worldPosition = raycastHit.point;
@@ -62,11 +60,16 @@ public class GridMoveManager : MonoBehaviour
         }
         else
         {
-            Ray ray = Camera.main.ScreenPointToRay(screenPosition);
+            Ray ray = GetRayFromScreenPosition(screenPosition);
             if (Physics.Raycast(ray, out RaycastHit raycastHit, float.MaxValue, gridMoverLayer))
             {
                 currentMover = raycastHit.collider.GetComponent<IGridMover>();
             }
         }
+    }
+    
+    private Ray GetRayFromScreenPosition(Vector2 screenPosition)
+    {
+        return Camera.main.ScreenPointToRay(screenPosition);
     }
 }

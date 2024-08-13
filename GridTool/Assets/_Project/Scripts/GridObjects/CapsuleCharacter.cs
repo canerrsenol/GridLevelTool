@@ -47,7 +47,6 @@ public class CapsuleCharacter : MonoBehaviour, IGridMover, ITileObject
         {
             Tile tile = gridBase.GetTile(targetPosition);
             tile.SetTileObject(null);
-            
             path.RemoveAt(0);
             
             if (path.Count == 0)
@@ -56,6 +55,7 @@ public class CapsuleCharacter : MonoBehaviour, IGridMover, ITileObject
             }
             else
             {
+                // Move to next tile
                 Tile nextTile = gridBase.GetTile(path[0]);
                 nextTile.SetTileObject(this);
             }
