@@ -34,8 +34,8 @@ public class GridCreatorEditor : Editor
 
         if (!Mathf.Approximately(previousTileSize, gridLevelCreator.TileSize))
         {
-            gridLevelCreator.UpdateAllTilesPosition();
-            gridLevelCreator.UpdateAllTileObjectsPosition();
+            gridLevelCreator.UpdateGridSize();
+
             previousTileSize = gridLevelCreator.TileSize;
         }
         

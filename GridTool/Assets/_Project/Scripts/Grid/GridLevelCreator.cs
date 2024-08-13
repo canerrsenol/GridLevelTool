@@ -15,10 +15,15 @@ public class GridLevelCreator : MonoBehaviour
     [SerializeField] private float tileSize = 1.1f;
     public float TileSize => tileSize;
 
-    [HideInInspector] [SerializedDictionary("Tile Position", "Object Transform")] 
-    [SerializeField] private SerializedDictionary<Vector2Int, Transform> tileObjectsDictionary;
+    [SerializedDictionary("Tile Position", "Object Transform")] 
+    public SerializedDictionary<Vector2Int, Transform> tileObjectsDictionary;
     
     [HideInInspector] public GameObject GridParent;
+
+    private void Awake()
+    {
+        gameObject.SetActive(false);
+    }
 
     public void CreateGrid()
     {
@@ -64,6 +69,13 @@ public class GridLevelCreator : MonoBehaviour
         {
             DestroyTileObjectAtPosition(key);
         }
+    }
+
+    public void UpdateGridSize()
+    {
+        UpdateAllTilesPosition();
+        UpdateAllTileObjectsPosition();
+        if(GridParent != null) GridParent.GetComponent<GridBase>().SetGridSettings(gridSize, tileSize);
     }
 
     public void UpdateAllTilesPosition()

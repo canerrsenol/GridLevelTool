@@ -6,34 +6,38 @@ using UnityUtils;
 public class GridBase : Singleton<GridBase>
 {
     [SerializeField] private Vector2Int gridSize;
-    private float tileSize;
+    [SerializeField] private float tileSize;
+    public float TileSize => tileSize;
     
-    private Tile[,] tileObjectArray;
+    private Tile[,] tilesArray;
 
     protected override void Awake()
     {
         base.Awake();
+        
+        tilesArray = new Tile[gridSize.x, gridSize.y];
+        
         List <Tile> tiles = GetComponentsInChildren<Tile>().ToList();
-
         for (int x = 0; x < gridSize.x; x++)
         {
-            for (int y = 0; y < gridSize.y; y++)
+            for (int z = 0; z < gridSize.y; z++)
             {
-                tileObjectArray[x, y] = tiles[0];
+                tilesArray[x, z] = tiles[0];
+                tiles[0].SetTilePosition(new TilePosition(x, z));
                 tiles.RemoveAt(0);
             }
         }
         
-        GetTileObjects();
+        SetTileObjects();
     }
 
-    private void GetTileObjects()
+    private void SetTileObjects()
     {
         for (int x = 0; x < gridSize.x; x++)
         {
-            for (int y = 0; y < gridSize.y; y++)
+            for (int z = 0; z < gridSize.y; z++)
             {
-                Vector2Int tilePosition = new Vector2Int(x, y);
+                TilePosition tilePosition = new TilePosition(x, z);
                 Vector3 worldPosition = GetWorldPosition(tilePosition);
                 float raycastOffsetDistance = 5f;
                  
@@ -42,7 +46,7 @@ public class GridBase : Singleton<GridBase>
                 {
                     if(raycastHit.collider.TryGetComponent(out ITileObject tileObject))
                     {
-                        tileObjectArray[x, y].SetTileObject(tileObject);
+                        tilesArray[x, z].SetTileObject(tileObject);
                     }
                 }
             }
@@ -58,29 +62,29 @@ public class GridBase : Singleton<GridBase>
     public int GetWidth() { return gridSize.x; }
     public int GetHeight() { return gridSize.y; }
 
-    public Vector3 GetWorldPosition(Vector2Int tilePosition)
+    public Vector3 GetWorldPosition(TilePosition tilePosition)
     {
-        return new Vector3(tilePosition.x, 0f, tilePosition.y) * tileSize;
+        return new Vector3(tilePosition.x, 0f, tilePosition.z) * tileSize;
     }
     
-    public Vector2Int GetTilePosition(Vector3 worldPosition)
+    public TilePosition GetTilePosition(Vector3 worldPosition)
     {
-        return new Vector2Int(
+        return new TilePosition(
             Mathf.RoundToInt(worldPosition.x / tileSize),
             Mathf.RoundToInt(worldPosition.z / tileSize)
         );
     }
     
-    public Tile GetTile(Vector2Int tilePosition)
+    public Tile GetTile(TilePosition tilePosition)
     {
-        return tileObjectArray[tilePosition.x, tilePosition.y];
+        return tilesArray[tilePosition.x, tilePosition.z];
     }
     
-    public bool IsValidGridPosition(Vector2Int tilePosition)
+    public bool IsValidGridPosition(TilePosition tilePosition)
     {
         return tilePosition.x >= 0 &&
                tilePosition.x < gridSize.x && 
-               tilePosition.y >= 0 && 
-               tilePosition.y < gridSize.y;
+               tilePosition.z >= 0 && 
+               tilePosition.z < gridSize.y;
     }
 }

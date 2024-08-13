@@ -1,13 +1,15 @@
+using System;
 using UnityEngine;
-using UnityUtils;
 
-public class InputManager : Singleton<InputManager>
+public class InputManager : UnityUtils.Singleton<InputManager>
 {
-    [SerializeField] private LayerMask groundLayer;
-    public Vector3 GetPosition()
+    public event Action<Vector2> OnClick; 
+    
+    private void Update()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Physics.Raycast(ray, out RaycastHit raycastHit, float.MaxValue, instance.groundLayer);
-        return raycastHit.point;
+        if (Input.GetMouseButtonDown(0))
+        {
+            OnClick?.Invoke(Input.mousePosition);
+        }
     }
 }

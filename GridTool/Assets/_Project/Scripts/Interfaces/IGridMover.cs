@@ -3,5 +3,7 @@ using UnityEngine;
 
 public interface IGridMover
 {
-    public void Move(List<Vector2Int> path);
+    public Vector3 GetPosition();
+    public void Move(List<TilePosition> path);
+    public bool IsMoving();
 }
