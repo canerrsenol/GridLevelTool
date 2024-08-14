@@ -9,6 +9,8 @@ public class CapsuleCharacter : MonoBehaviour, IGridMover, ITileObject
     private List<TilePosition> path;
     
     private GridBase gridBase;
+    
+    private Vector3 targetWorldPosition;
 
     private void Awake()
     {
@@ -23,6 +25,7 @@ public class CapsuleCharacter : MonoBehaviour, IGridMover, ITileObject
     public void Move(List<TilePosition> path)
     {
         this.path = path;
+        targetWorldPosition = gridBase.GetWorldPosition(path[0]);
         
         TilePosition currentTilePosition = gridBase.GetTilePosition(transform.position);
         Tile currentTile = gridBase.GetTile(currentTilePosition);
@@ -37,28 +40,30 @@ public class CapsuleCharacter : MonoBehaviour, IGridMover, ITileObject
     private void Update()
     {
         if (path == null || path.Count == 0) return;
-        
-        TilePosition targetPosition = path[0];
-        Vector3 targetWorldPosition = new Vector3(targetPosition.x, 0, targetPosition.z) * gridBase.TileSize;
-        Vector3 direction = targetWorldPosition - transform.position;
-        transform.position += direction.normalized * (moveSpeed * Time.deltaTime);
 
-        if (Vector3.Distance(transform.position, targetWorldPosition) < 0.01f)
+        float distanceToTarget = Vector3.Distance(transform.position, targetWorldPosition);
+
+        if (distanceToTarget < 0.01f)
         {
-            Tile tile = gridBase.GetTile(targetPosition);
-            tile.SetTileObject(null);
-            path.RemoveAt(0);
-            
-            if (path.Count == 0)
+            if (path.Count != 1)
             {
-                // Path is finished
+                Tile currentTile = gridBase.GetTile(path[0]);
+                currentTile.SetTileObject(null);
             }
-            else
+            
+            path.RemoveAt(0);
+
+            if (path.Count > 0)
             {
-                // Move to next tile
+                targetWorldPosition = gridBase.GetWorldPosition(path[0]);
                 Tile nextTile = gridBase.GetTile(path[0]);
                 nextTile.SetTileObject(this);
             }
+        }
+        else
+        {
+            Vector3 direction = targetWorldPosition - transform.position;
+            transform.position += direction.normalized * (moveSpeed * Time.deltaTime);
         }
     }
 }

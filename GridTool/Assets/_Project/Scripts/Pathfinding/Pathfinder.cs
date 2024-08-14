@@ -68,19 +68,16 @@ public class Pathfinder
                 }
                 
                 int tentativeGCost = currenTile.GetNode().GetGCost() + CalculateDistance(currenTile.GetTilePosition(), neighbourTile.GetTilePosition());
+
+                if (tentativeGCost >= neighbourTile.GetNode().GetGCost()) continue;
+                neighbourTile.GetNode().SetCameFromTile(currenTile);
+                neighbourTile.GetNode().SetGCost(tentativeGCost);
+                neighbourTile.GetNode().SetHCost(CalculateDistance(neighbourTile.GetTilePosition(), endTilePosition));
+                neighbourTile.GetNode().CalculateFCost();
                 
-                // Check we have a better path
-                if (tentativeGCost < neighbourTile.GetNode().GetGCost())
+                if (!openList.Contains(neighbourTile))
                 {
-                    neighbourTile.GetNode().SetCameFromTile(currenTile);
-                    neighbourTile.GetNode().SetGCost(tentativeGCost);
-                    neighbourTile.GetNode().SetHCost(CalculateDistance(neighbourTile.GetTilePosition(), endTilePosition));
-                    neighbourTile.GetNode().CalculateFCost();
-                
-                    if (!openList.Contains(neighbourTile))
-                    {
-                        openList.Add(neighbourTile);
-                    }
+                    openList.Add(neighbourTile);
                 }
             }
         }

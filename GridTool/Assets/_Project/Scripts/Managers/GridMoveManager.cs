@@ -50,6 +50,7 @@ public class GridMoveManager : MonoBehaviour
                 TilePosition targetTilePosition = gridBase.GetTilePosition(worldPosition);
                 
                 if(!gridBase.IsValidGridPosition(targetTilePosition)) return;
+                if(moverTilePosition == targetTilePosition) return;
                 
                 var path = pathfinder.FindPath(moverTilePosition, targetTilePosition);
                 if (path == null || path.Count == 0) return;

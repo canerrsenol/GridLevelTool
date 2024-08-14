@@ -2,7 +2,7 @@ using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(GridLevelCreator))]
-public class GridCreatorEditor : Editor
+public class GridLevelCreatorEditor : Editor
 {
     private int previousWidth;
     private int previousHeight;
